@@ -1,0 +1,42 @@
+// 
+// _table.scss
+// 
+
+.table {
+  th {
+      font-weight: $font-weight-medium;
+  }
+}
+
+//Table centered
+.table-centered {
+  td,th {
+      vertical-align: middle !important;
+  }
+}
+
+.table-nowrap {
+  th, td {
+    white-space: nowrap;
+  }
+}
+
+.table-bordered {
+  border: 0px 0px 1px 0px solid #eff2f7;
+  th{
+    background-color: #eff2f7;
+  }
+
+  th,
+  td {
+    border: 0px 0px 1px 0px solid $table-border-color;
+  }
+}
+// .table-bordered-bottom {
+//   border-bottom: $table-border-width solid $table-border-color!important;
+
+//   th,
+//   td {
+//     border-bottom: $table-border-width solid $table-border-color!important;
+//   }
+// }
