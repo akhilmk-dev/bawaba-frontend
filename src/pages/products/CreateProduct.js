@@ -47,6 +47,10 @@ const ProductForm = ({ onCreated }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const [marketInventory, setMarketInventory] = useState({});
+
+
+
   useEffect(() => {
     dispatch(fetchUsersRequest());
   }, []);
@@ -121,6 +125,10 @@ const ProductForm = ({ onCreated }) => {
   }, [isVendor, vendorName]);
 
 
+
+
+
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -129,6 +137,7 @@ const ProductForm = ({ onCreated }) => {
       product_type: "",
       tags: "",
       price: "",
+      markets: [],
       options: [
         { name: "Color", values: [""] },
         { name: "Size", values: [""] },
@@ -141,7 +150,10 @@ const ProductForm = ({ onCreated }) => {
     validationSchema: Yup.object({
       title: Yup.string().required("Required"),
       price: Yup.number().required("Product price is required").typeError("Must be a number"),
-    }),
+       markets: Yup.array().min(1, "Select at least one market"),
+    },
+
+  ),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         // Convert images to base64
@@ -197,6 +209,8 @@ const ProductForm = ({ onCreated }) => {
     },
   });
 
+
+
   useEffect(() => {
     const newVariants = generateVariants(formik.values.options, formik.values.price || 0);
     const mergedVariants = newVariants.map((v) => {
@@ -210,6 +224,23 @@ const ProductForm = ({ onCreated }) => {
     });
     setVariants(mergedVariants);
   }, [formik.values.options, formik.values.price]);
+
+  useEffect(() => {
+  const inventory = {};
+
+  variants.forEach((_, idx) => {
+    inventory[idx] = inventory[idx] || {};
+    formik.values.markets.forEach((market) => {
+      inventory[idx][market] =
+        inventory[idx][market] ?? 0;
+    });
+  });
+
+  setMarketInventory(inventory);
+}, [formik.values.markets, variants]);
+
+
+
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -242,6 +273,13 @@ const ProductForm = ({ onCreated }) => {
   };
 
   const labelStyle = { fontWeight: 500 };
+
+  const MARKET_OPTIONS = [
+  { label: "UAE", value: "uae" },
+  { label: "India", value: "india" },
+  { label: "Qatar", value: "qatar" },
+];
+
 
   return (
     <div className="page-content">
@@ -360,187 +398,170 @@ const ProductForm = ({ onCreated }) => {
                 )}
               </div>
 
-              {/* ---------- OPTIONS SECTION ---------- */}
-              <div style={cardStyle}>
-                <div style={cardTitle}>Options</div>
+              {/* ---------- MARKETS ---------- */}
+<div style={cardStyle}>
+  <div style={cardTitle}>Markets*</div>
 
-                <FieldArray name="options">
-                  {({ push, remove }) => (
-                    <div className="d-flex flex-column gap-3">
+  <Select
+    isMulti
+    options={MARKET_OPTIONS}
+    value={MARKET_OPTIONS.filter(m =>
+      formik.values.markets.includes(m.value)
+    )}
+onChange={(selected) => {
+  const values = selected.map(s => s.value);
+  formik.setFieldValue("markets", values);
+}}
 
-                      {formik.values.options?.map((option, idx) => (
-                        <div
-                          key={idx}
-                          style={{
-                            border: "1px solid #dfe3e8",
-                            padding: "16px",
-                            borderRadius: "10px",
-                            background: "#fafbfc",
-                          }}
-                        >
-                          <Row className="align-items-center mb-3">
-                            <Col md={10}>
-                              <Label style={labelStyle}>Option Name</Label>
-                              <Field
-                                name={`options.${idx}.name`}
-                                as={Input}
-                                placeholder="Option Name"
-                              />
-                            </Col>
+  />
 
-                            {/* 🗑 TRASH ICON FOR REMOVE OPTION */}
-                            <Col md={2} className="text-end">
-                              <span
-                                onClick={() => remove(idx)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <FaRegTrashAlt size={16} color="red" />
-                              </span>
-
-                            </Col>
-                          </Row>
-
-                          <Label style={labelStyle}>Values</Label>
-
-                          <div className="d-flex flex-column gap-2">
-
-                            {option.values?.map((value, vIdx) => (
-                              <div
-                                key={vIdx}
-                                style={{
-                                  display: "flex",
-                                  gap: "10px",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Field
-                                  name={`options.${idx}.values.${vIdx}`}
-                                  as={Input}
-                                  placeholder="Value"
-                                />
-
-                                {/* 🗑 TRASH ICON FOR REMOVE VALUE */}
-                                <span
-                                  onClick={() => {
-                                    const updated = [...option.values];
-                                    updated.splice(vIdx, 1);
-                                    formik.setFieldValue(`options.${idx}.values`, updated);
-                                  }}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <FaRegTrashAlt size={16} color="red" />
-                                </span>
+  {formik.errors.markets && (
+    <FormText color="danger">{formik.errors.markets}</FormText>
+  )}
+</div>
 
 
-                                {/* ➕ ADD VALUE ICON — ONLY ON LAST VALUE */}
-                                {vIdx === option.values.length - 1 && (
-                                  <span
-                                    onClick={() =>
-                                      formik.setFieldValue(
-                                        `options.${idx}.values`,
-                                        [...option.values, ""]
-                                      )
-                                    }
-                                    style={{ cursor: "pointer", marginLeft: "4px" }}
-                                  >
-                                    <BsPlusSquareDotted size={18} color="" />
-                                  </span>
-                                )}
+           {/* ---------- OPTIONS SECTION ---------- */}
+<div style={cardStyle}>
+  <div style={cardTitle}>Options</div>
 
-                              </div>
-                            ))}
+  <FieldArray name="options">
+    {({ push, remove }) => (
+      <div className="d-flex flex-column gap-3">
+        {formik.values.options.map((option, idx) => (
+          <div key={idx} className="p-3 border rounded">
+            <Row>
+              <Col md={10}>
+                <Field
+                  name={`options.${idx}.name`}
+                  as={Input}
+                  placeholder="Option name"
+                />
+              </Col>
+              <Col md={2} className="text-end">
+                <FaRegTrashAlt
+                  style={{ cursor: "pointer" }}
+                  onClick={() => remove(idx)}
+                />
+              </Col>
+            </Row>
 
-                          </div>
-                        </div>
-                      ))}
+            {option.values.map((v, vIdx) => (
+              <div
+                key={vIdx}
+                className="d-flex gap-2 mt-2 align-items-center"
+              >
+                <Field
+                  name={`options.${idx}.values.${vIdx}`}
+                  as={Input}
+                  placeholder="Value"
+                />
 
-                      {/* ➕ ADD OPTION BUTTON */}
-                      <span
-                        onClick={() =>
-                          push({
-                            name: `Option ${formik.values.options?.length + 1}`,
-                            values: [""],
-                          })
-                        }
-                        style={{
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                          color: "black", // primary blue
-                          fontWeight: 500,
-                          marginTop: "8px"
-                        }}
-                      >
-                        <BsPlusCircle size={18} />
-                        Add another option
-                      </span>
-                      <div style={{ marginTop: "16px", textAlign: "left" }}>
-                        <Button
-                          color="primary"
-                          type="submit"
-                          disabled={formik.isSubmitting}
-                          style={{ width: "auto", minWidth: "100px" }}
-                        >
-                          {id ? "Update Product" : "Create Product"}
-                        </Button>
-                      </div>
+                <FaRegTrashAlt
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    const updated = [...option.values];
+                    updated.splice(vIdx, 1);
+                    formik.setFieldValue(
+                      `options.${idx}.values`,
+                      updated
+                    );
+                  }}
+                />
 
-
-                    </div>
-
-
-                  )}
-                </FieldArray>
+                {vIdx === option.values.length - 1 && (
+                  <BsPlusSquareDotted
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      formik.setFieldValue(
+                        `options.${idx}.values`,
+                        [...option.values, ""]
+                      )
+                    }
+                  />
+                )}
               </div>
+            ))}
+          </div>
+        ))}
+
+        <Button
+          size="sm"
+          onClick={() => push({ name: "", values: [""] })}
+        >
+          Add option
+        </Button>
+      </div>
+    )}
+  </FieldArray>
+</div>
 
 
 
-              {/* ---------- VARIANTS SECTION ---------- */}
-              {variants?.length > 0 && variants?.some(v => v.option1 || v.option2 || v.option3) && (
-                <div style={cardStyle}>
-                  <div style={cardTitle}>Variants</div>
-                  <Row className="fw-bold mb-2" style={{ padding: "10px 0", borderBottom: "1px solid #dfe3e8" }}>
-                    <Col md={4}>Variant</Col>
-                    <Col md={4}>Price</Col>
-                    <Col md={4}>inventory_quantity</Col>
-                  </Row>
-                  {variants?.map((variant, idx) => (
-                    <Row key={idx} className="align-items-center mb-2" style={{ padding: "8px 0", borderBottom: "1px solid #f0f0f0" }}>
-                      <Col md={4}>
-                        <span style={{ fontSize: "15px", fontWeight: 500 }}>
-                          {[variant.option1, variant.option2, variant.option3].filter(Boolean).join(" - ")}
-                        </span>
-                      </Col>
-                      <Col md={4}>
-                        <Input
-                          type="number"
-                          value={variant.price}
-                          placeholder="Price"
-                          onChange={(e) => {
-                            const updated = [...variants];
-                            updated[idx].price = e.target.value;
-                            setVariants(updated);
-                          }}
-                        />
-                      </Col>
-                      <Col md={4}>
-                        <Input
-                          type="number"
-                          value={variant.inventory_quantity}
-                          placeholder="Qty"
-                          onChange={(e) => {
-                            const updated = [...variants];
-                            updated[idx].inventory_quantity = Number(e.target.value);
-                            setVariants(updated);
-                          }}
-                        />
-                      </Col>
-                    </Row>
-                  ))}
 
-                </div>
-              )}
+
+
+          
+{/* ---------- VARIANTS + MARKET INVENTORY ---------- */}
+{variants.length > 0 && formik.values.markets.length > 0 && (
+  <div style={cardStyle}>
+    <div style={cardTitle}>Variants Inventory</div>
+
+    <Row className="fw-bold mb-2">
+      <Col md={3}>Variant</Col>
+      <Col md={3}>Price</Col>
+
+      {formik.values.markets.map((market) => (
+        <Col key={market} md={2}>
+          {market.toUpperCase()}
+        </Col>
+      ))}
+    </Row>
+
+    {variants.map((variant, idx) => (
+      <Row key={idx} className="align-items-center mb-2">
+        <Col md={3}>
+          {[variant.option1, variant.option2, variant.option3]
+            .filter(Boolean)
+            .join(" - ")}
+        </Col>
+
+        <Col md={3}>
+          <Input
+            type="number"
+            value={variant.price}
+            onChange={(e) => {
+              const updated = [...variants];
+              updated[idx].price = e.target.value;
+              setVariants(updated);
+            }}
+          />
+        </Col>
+
+        {formik.values.markets.map((market) => (
+          <Col key={market} md={2}>
+            <Input
+              type="number"
+              placeholder="Qty"
+              value={marketInventory[idx]?.[market] || ""}
+              onChange={(e) => {
+                setMarketInventory((prev) => ({
+                  ...prev,
+                  [idx]: {
+                    ...prev[idx],
+                    [market]: Number(e.target.value),
+                  },
+                }));
+              }}
+            />
+          </Col>
+        ))}
+      </Row>
+    ))}
+  </div>
+)}
+
+
 
             </Col>
 
