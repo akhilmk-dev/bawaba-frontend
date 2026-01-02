@@ -126,7 +126,7 @@ const Login = props => {
                       {showForgot ? t('Forgot Password') : t('Welcome !')}
                     </h5>
                     <p className="text-white-50">
-                      {!showForgot && t('Sign in to continue to Menahub-mvec')}
+                      {!showForgot && t('Sign in to continue to Bawwaba.')}
                     </p>
                     <Link to="/" className="logo logo-admin">
                       <img src={logoSm} alt="logo" style={{ objectFit: "contain" }} width="70px" />

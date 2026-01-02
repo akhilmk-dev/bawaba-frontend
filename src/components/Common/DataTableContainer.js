@@ -415,7 +415,7 @@ const TableContainer = ({
               <tr>
                 <td colSpan={columns.length+1} className="text-center border-none">
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
-                    <FadeLoader color="#f28c28" size={40} />
+                    <FadeLoader color="#ED1C24" size={40} />
                   </div>
                 </td>
               </tr>

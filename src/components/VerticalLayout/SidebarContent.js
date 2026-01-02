@@ -361,7 +361,7 @@ const SidebarContent = ({ t }) => {
             left:"20px",
             right:0,
            padding:"10px 0",
-           color:"#f28c28",
+           color:"#ED1C24",
            cursor:"pointer"
             }}
                onClick={handleLogout}

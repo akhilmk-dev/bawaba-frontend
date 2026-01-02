@@ -88,11 +88,13 @@ const Header = props => {
           <div className="d-flex">
             <div className="navbar-brand-box" style={{padding: '0px'}}>
               <Link to="/" className="logo logo-dark">
-                <span className="logo-sm">
-                  <img src={logosmImg} alt=""  width="40px"/>
+                <span className="logo-sm text-white ">
+                  {/* <img src={logosmImg} alt=""  width="40px"/> */}
+                  Bawwaba
                 </span>
-                <span className="logo-lg">
+                <span className="logo-lg text-white fs-3">
                   <img src={logodarkImg} alt=""   width="140px" />
+                
                 </span>
               </Link>
 
@@ -112,7 +114,7 @@ const Header = props => {
               }}
               data-target="#topnav-menu-content"
             >
-              <i className="mdi mdi-menu fs-4"></i>
+              <i className="mdi mdi-menu fs-4 text-dark"></i>
             </button>
           </div>
 

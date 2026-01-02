@@ -37,7 +37,7 @@
 .vertical-menu {
     width: $sidebar-width;
     z-index: 50;
-    background: #0C3451 !important;
+    background: #FFFFFF !important;
     bottom: 0;
     margin-top: 0;
     position: fixed;
@@ -58,6 +58,7 @@
 
 #sidebar-menu {
     padding: 0px 0 30px 0;
+    background: #FFFFFF;
 
     .mm-active {
         >.has-arrow {
@@ -88,7 +89,7 @@
                 position: relative;
                 font-size: 15.7px;
                 transition: all .4s;
-                color:#ffff !important;
+                color:#000000 !important;
 
                 i {
                     display: inline-block;
@@ -238,6 +239,7 @@
 
         // Sidebar Menu
         #sidebar-menu {
+            
 
             .menu-title,
             .badge,

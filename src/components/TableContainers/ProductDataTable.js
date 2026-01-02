@@ -216,7 +216,7 @@ const ProductDataTable = ({
                                 <tr>
                                     <td colSpan={columns.length + 1} style={{ height: "500px", textAlign: "center", verticalAlign: "middle" }}>
                                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                                            <FadeLoader color="#f28c28" size={40} />
+                                            <FadeLoader color="#ED1C24" size={40} />
                                         </div>
                                     </td>
                                 </tr>
@@ -255,8 +255,8 @@ const ProductDataTable = ({
                                 onClick={() => setPageIndex((prev) => Math.max(prev - 1, 0))}
                                 disabled={pageIndex === 0}
                                 style={{
-                                    backgroundColor: pageIndex === 0 ? "#d3d3d3" : "#F28C28",
-                                    borderColor: pageIndex === 0 ? "" : "#F28C28",
+                                    backgroundColor: pageIndex === 0 ? "#d3d3d3" : "#ED1C24",
+                                    borderColor: pageIndex === 0 ? "" : "#ED1C24",
                                     color: pageIndex === 0 ? "" : "#fff",
                                 }}
                             >
@@ -268,8 +268,8 @@ const ProductDataTable = ({
                                 onClick={() => setPageIndex((prev) => (nextCursor ? prev + 1 : prev))}
                                 disabled={!nextCursor}
                                 style={{
-                                    backgroundColor: nextCursor ? "#F28C28" : "#d3d3d3",
-                                    borderColor: nextCursor ? "#F28C28" : "",
+                                    backgroundColor: nextCursor ? "#ED1C24" : "#d3d3d3",
+                                    borderColor: nextCursor ? "#ED1C24" : "",
                                     color: nextCursor ? "#fff" : "",
                                 }}
                             >

@@ -57,7 +57,7 @@ const LanguageDropdown = () => {
   return (
     <>
       <Dropdown isOpen={menu} toggle={toggle} className=" d-md-block ms-2">
-        <DropdownToggle className="btn header-item waves-effect text-white" tag="button">
+        <DropdownToggle className="btn header-item waves-effect text-dark" tag="button">
           <img
             src={get(languages, `${selectedLang}.flag`)}
             alt="Zain"
@@ -65,7 +65,7 @@ const LanguageDropdown = () => {
             className="me-2"
           />
           {" "}{get(languages, `${selectedLang}.label`)}
-          {" "}<span className="mdi mdi-chevron-down text-white"></span>
+          {" "}<span className="mdi mdi-chevron-down text-dark"></span>
         </DropdownToggle>
         <DropdownMenu className="language-switch dropdown-menu-end">
           {map(Object.keys(languages), key => (

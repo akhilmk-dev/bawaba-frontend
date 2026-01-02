@@ -73,7 +73,7 @@ const ProfileMenu = props => {
             src={user1}
             alt="Header Avatar"
           /> */}
-          <FaRegUser size={35} color="#fff"  style={{borderRadius: "50%", padding:"5px", border:"1px solid white"}}/>
+          <FaRegUser size={35} color="#000"  style={{borderRadius: "50%", padding:"5px", border:"1px solid black"}}/>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem tag="a" onClick={()=>navigate('/profile')}>

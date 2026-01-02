@@ -8,7 +8,7 @@ const Footer = () => {
         <Container fluid={true}>
           <Row>
             <div className="col-12">
-                &copy; {new Date().getFullYear()} MenaHub Admin Panel. All rights reserved.
+                &copy; {new Date().getFullYear()} Bawwaba Admin Panel. All rights reserved.
             </div>
           </Row>
         </Container>

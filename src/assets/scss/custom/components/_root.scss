@@ -27,7 +27,7 @@
 [data-bs-theme="light"] {
     --#{$prefix}white-text:                         #fff;
     --#{$prefix}secondary:                          #{$gray-200};
-    --#{$prefix}header-bg:                          #0C3451;
+    --#{$prefix}header-bg:                          #FFFFFF;
     --#{$prefix}header-item-color:                  #{$header-item-color};
 
     --#{$prefix}header-item-sub-color:              #{$text-muted};
@@ -61,7 +61,7 @@
     --#{$prefix}sidebar-menu-item-icon-color:                  #464b50;
     --#{$prefix}sidebar-menu-item-hover-color:                 #0b0d0e;
     --#{$prefix}sidebar-menu-item-active-color:                #373131;
-    --#{$prefix}sidebar-menu-item-active-bg:                   #F28C28;
+    --#{$prefix}sidebar-menu-item-active-bg:                   #ED1C24;
 
 
     [data-sidebar="dark"]{
